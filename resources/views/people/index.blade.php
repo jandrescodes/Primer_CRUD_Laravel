@@ -15,9 +15,14 @@
             <h5 class="mb-0 text-primary fw-bold">
                 <i class="fa-solid fa-list-check me-2"></i>Lista de Personas
             </h5>
-            <a href="{{ route('personas.create') }}" class="btn btn-primary btn-sm shadow-sm">
-                <i class="fa-solid fa-user-plus me-1"></i> Nueva Persona
-            </a>
+            <div class="d-flex gap-2">
+                <a href="{{ route('personas.trash') }}" class="btn btn-outline-danger btn-sm shadow-sm">
+                    <i class="fa-solid fa-trash-can me-1"></i> Papelera
+                </a>
+                <a href="{{ route('personas.create') }}" class="btn btn-primary btn-sm shadow-sm">
+                    <i class="fa-solid fa-user-plus me-1"></i> Nueva Persona
+                </a>
+            </div>
         </div>
         <div class="card-body">
             @if ($mensaje = Session::get('success'))

@@ -14,7 +14,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::view('/', 'home.index')->name('home.index');
+Route::get('/', function () {
+    return view('home.index', [
+        'totalPersonas' => \App\Models\Personas::count(),
+        'enPapelera'    => \App\Models\Personas::onlyTrashed()->count(),
+    ]);
+})->name('home.index');
 
 Route::prefix('people')->group(function () {
     Route::get('/', [PersonasController::class, 'index'])->name('personas.index');
@@ -24,4 +29,7 @@ Route::prefix('people')->group(function () {
     Route::put('/update/{id}', [PersonasController::class, 'update'])->name('personas.update');
     Route::get('/show', [PersonasController::class, 'show'])->name('personas.show');
     Route::get('/destroy/{id}', [PersonasController::class, 'destroy'])->name('personas.destroy');
+    Route::get('/trash', [PersonasController::class, 'trash'])->name('personas.trash');
+    Route::get('/restore/{id}', [PersonasController::class, 'restore'])->name('personas.restore');
+    Route::get('/force-delete/{id}', [PersonasController::class, 'forceDelete'])->name('personas.forceDelete');
 });
