@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StorePersonaRequest;
+use App\Http\Requests\UpdatePersonaRequest;
 use App\Models\Personas;
-use Illuminate\Http\Request;
 
 class PersonasController extends Controller
 {
@@ -27,7 +28,7 @@ class PersonasController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StorePersonaRequest $request)
     {
         //
         $personas = new Personas();
@@ -61,7 +62,7 @@ class PersonasController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $id)
+    public function update(UpdatePersonaRequest $request, $id)
     {
         //
         $personas = Personas::find($id);
@@ -75,14 +76,28 @@ class PersonasController extends Controller
         return redirect()->route('personas.index')->with('success', '¡Registro Actualizado Exitosamente!');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy($id)
     {
-        //
-        $personas = Personas::find($id);
+        $personas = Personas::findOrFail($id);
         $personas->delete();
-        return redirect()->route('personas.index')->with('success', '¡Registro Eliminado Exitosamente!');
+        return redirect()->route('personas.index')->with('success', '¡Registro movido a la papelera!');
+    }
+
+    public function trash()
+    {
+        $datos = Personas::onlyTrashed()->get();
+        return view('people.trash', compact('datos'));
+    }
+
+    public function restore($id)
+    {
+        Personas::withTrashed()->findOrFail($id)->restore();
+        return redirect()->route('personas.trash')->with('success', '¡Registro restaurado exitosamente!');
+    }
+
+    public function forceDelete($id)
+    {
+        Personas::withTrashed()->findOrFail($id)->forceDelete();
+        return redirect()->route('personas.trash')->with('success', '¡Registro eliminado permanentemente!');
     }
 }

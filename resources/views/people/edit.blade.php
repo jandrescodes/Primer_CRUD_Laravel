@@ -27,17 +27,23 @@
                                 <label for="paterno" class="form-label fw-bold">Apellido Paterno:</label>
                                 <div class="input-group">
                                     <span class="input-group-text"><i class="fa-solid fa-font"></i></span>
-                                    <input type="text" class="form-control" name="paterno" id="paterno" required
-                                        value="{{ $persona->paterno }}">
+                                    <input type="text" class="form-control @error('paterno') is-invalid @enderror"
+                                        name="paterno" id="paterno" value="{{ old('paterno', $persona->paterno) }}">
                                 </div>
+                                @error('paterno')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="materno" class="form-label fw-bold">Apellido Materno:</label>
                                 <div class="input-group">
                                     <span class="input-group-text"><i class="fa-solid fa-font"></i></span>
-                                    <input type="text" class="form-control" name="materno" id="materno" required
-                                        value="{{ $persona->materno }}">
+                                    <input type="text" class="form-control @error('materno') is-invalid @enderror"
+                                        name="materno" id="materno" value="{{ old('materno', $persona->materno) }}">
                                 </div>
+                                @error('materno')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
                             </div>
                         </div>
 
@@ -45,18 +51,25 @@
                             <label for="nombre" class="form-label fw-bold">Nombre Completo:</label>
                             <div class="input-group">
                                 <span class="input-group-text"><i class="fa-solid fa-user"></i></span>
-                                <input type="text" class="form-control" name="nombre" id="nombre" required
-                                    value="{{ $persona->nombre }}">
+                                <input type="text" class="form-control @error('nombre') is-invalid @enderror"
+                                    name="nombre" id="nombre" value="{{ old('nombre', $persona->nombre) }}">
                             </div>
+                            @error('nombre')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
                         </div>
 
                         <div class="mb-4">
                             <label for="fecha_nacimiento" class="form-label fw-bold">Fecha de Nacimiento:</label>
                             <div class="input-group">
                                 <span class="input-group-text"><i class="fa-solid fa-calendar-days"></i></span>
-                                <input type="date" class="form-control" name="fecha_nacimiento" id="fecha_nacimiento"
-                                    required value="{{ $persona->fecha_nacimiento }}">
+                                <input type="date" class="form-control @error('fecha_nacimiento') is-invalid @enderror"
+                                    name="fecha_nacimiento" id="fecha_nacimiento"
+                                    value="{{ old('fecha_nacimiento', $persona->fecha_nacimiento) }}">
                             </div>
+                            @error('fecha_nacimiento')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
                         </div>
                     </div>
                     <div class="card-footer">

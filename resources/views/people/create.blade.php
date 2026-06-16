@@ -26,16 +26,22 @@
                                 <label for="paterno" class="form-label fw-bold">Apellido Paterno:</label>
                                 <div class="input-group">
                                     <span class="input-group-text"><i class="fa-solid fa-font"></i></span>
-                                    <input type="text" class="form-control" name="paterno" id="paterno" required
-                                        placeholder="Ej: Perez">
+                                    <input type="text" class="form-control @error('paterno') is-invalid @enderror"
+                                        name="paterno" id="paterno" placeholder="Ej: Perez" value="{{ old('paterno') }}">
+                                    @error('paterno')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
                                 </div>
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="materno" class="form-label fw-bold">Apellido Materno:</label>
                                 <div class="input-group">
                                     <span class="input-group-text"><i class="fa-solid fa-font"></i></span>
-                                    <input type="text" class="form-control" name="materno" id="materno" required
-                                        placeholder="Ej: Garcia">
+                                    <input type="text" class="form-control @error('materno') is-invalid @enderror"
+                                        name="materno" id="materno" placeholder="Ej: Garcia" value="{{ old('materno') }}">
+                                    @error('materno')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
                                 </div>
                             </div>
                         </div>
@@ -44,8 +50,12 @@
                             <label for="nombre" class="form-label fw-bold">Nombre Completo:</label>
                             <div class="input-group">
                                 <span class="input-group-text"><i class="fa-solid fa-user"></i></span>
-                                <input type="text" class="form-control" name="nombre" id="nombre" required
-                                    placeholder="Ej: Juan Antonio">
+                                <input type="text" class="form-control @error('nombre') is-invalid @enderror"
+                                    name="nombre" id="nombre" placeholder="Ej: Juan Antonio"
+                                    value="{{ old('nombre') }}">
+                                @error('nombre')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
                             </div>
                         </div>
 
@@ -53,8 +63,11 @@
                             <label for="fecha_nacimiento" class="form-label fw-bold">Fecha de Nacimiento:</label>
                             <div class="input-group">
                                 <span class="input-group-text"><i class="fa-solid fa-calendar-days"></i></span>
-                                <input type="date" class="form-control" name="fecha_nacimiento" id="fecha_nacimiento"
-                                    required>
+                                <input type="date" class="form-control @error('fecha_nacimiento') is-invalid @enderror"
+                                    name="fecha_nacimiento" id="fecha_nacimiento" value="{{ old('fecha_nacimiento') }}">
+                                @error('fecha_nacimiento')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
                             </div>
                         </div>
                     </div>
