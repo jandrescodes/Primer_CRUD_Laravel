@@ -98,7 +98,7 @@
                         <li><i class="fa-solid fa-check text-success me-2"></i>DataTables con exportar a PDF, Excel y CSV
                         </li>
                         <li><i class="fa-solid fa-check text-success me-2"></i>SweetAlert2 para confirmaciones</li>
-                        <li><i class="fa-solid fa-check text-success me-2"></i>17 Feature Tests</li>
+                        <li><i class="fa-solid fa-check text-success me-2"></i>21 Feature Tests</li>
                     </ul>
                 </div>
             </div>
