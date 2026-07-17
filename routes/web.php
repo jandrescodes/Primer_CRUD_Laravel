@@ -28,8 +28,8 @@ Route::prefix('people')->group(function () {
     Route::get('/edit/{id}', [PersonasController::class, 'edit'])->name('personas.edit');
     Route::put('/update/{id}', [PersonasController::class, 'update'])->name('personas.update');
     Route::get('/show', [PersonasController::class, 'show'])->name('personas.show');
-    Route::get('/destroy/{id}', [PersonasController::class, 'destroy'])->name('personas.destroy');
+    Route::delete('/destroy/{id}', [PersonasController::class, 'destroy'])->name('personas.destroy');
     Route::get('/trash', [PersonasController::class, 'trash'])->name('personas.trash');
-    Route::get('/restore/{id}', [PersonasController::class, 'restore'])->name('personas.restore');
-    Route::get('/force-delete/{id}', [PersonasController::class, 'forceDelete'])->name('personas.forceDelete');
+    Route::put('/restore/{id}', [PersonasController::class, 'restore'])->name('personas.restore');
+    Route::delete('/force-delete/{id}', [PersonasController::class, 'forceDelete'])->name('personas.forceDelete');
 });

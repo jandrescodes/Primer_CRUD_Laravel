@@ -52,20 +52,21 @@ class PersonasController extends Controller
 
     /**
      * Show the form for editing the specified resource.
+     * 
      */
-    public function edit($id)
+    public function edit(int $id)
     {
-        $persona = Personas::find($id);
+        $persona = Personas::findOrFail($id);
         return view('people.edit', compact('persona'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdatePersonaRequest $request, $id)
+    public function update(UpdatePersonaRequest $request, int $id)
     {
         //
-        $personas = Personas::find($id);
+        $personas = Personas::findOrFail($id);
         $personas->paterno = $request->post('paterno');
         $personas->materno = $request->post('materno');
         $personas->nombre = $request->post('nombre');
@@ -76,7 +77,7 @@ class PersonasController extends Controller
         return redirect()->route('personas.index')->with('success', '¡Registro Actualizado Exitosamente!');
     }
 
-    public function destroy($id)
+    public function destroy(int $id)
     {
         $personas = Personas::findOrFail($id);
         $personas->delete();
@@ -89,13 +90,13 @@ class PersonasController extends Controller
         return view('people.trash', compact('datos'));
     }
 
-    public function restore($id)
+    public function restore(int $id)
     {
         Personas::withTrashed()->findOrFail($id)->restore();
         return redirect()->route('personas.trash')->with('success', '¡Registro restaurado exitosamente!');
     }
 
-    public function forceDelete($id)
+    public function forceDelete(int $id)
     {
         Personas::withTrashed()->findOrFail($id)->forceDelete();
         return redirect()->route('personas.trash')->with('success', '¡Registro eliminado permanentemente!');

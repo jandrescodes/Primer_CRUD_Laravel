@@ -53,14 +53,12 @@
                             <td>{{ \Carbon\Carbon::parse($item->deleted_at)->format('d/m/Y H:i') }}</td>
                             <td class="text-center">
                                 <div class="btn-group" role="group">
-                                    <a href="{{ route('personas.restore', $item->id) }}"
-                                        class="btn btn-sm btn-outline-success shadow-sm btn-restore"
+                                    <button type="button" class="btn btn-sm btn-outline-success shadow-sm btn-restore"
                                         data-nombre="{{ $item->nombre }} {{ $item->paterno }}"
-                                        title="Restaurar">
+                                        data-url="{{ route('personas.restore', $item->id) }}" title="Restaurar">
                                         <i class="fa-solid fa-rotate-left"></i>
-                                    </a>
-                                    <button type="button"
-                                        class="btn btn-sm btn-outline-danger shadow-sm btn-force-delete"
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-outline-danger shadow-sm btn-force-delete"
                                         data-nombre="{{ $item->nombre }} {{ $item->paterno }}"
                                         data-url="{{ route('personas.forceDelete', $item->id) }}"
                                         title="Eliminar permanentemente">

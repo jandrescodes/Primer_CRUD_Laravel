@@ -169,6 +169,16 @@ $(document).ready(function () {
         });
     }
 
+    // Envía un POST con _token y _method (spoofing de verbo) sin necesitar
+    // un <form> en el HTML, para no romper el layout del .btn-group.
+    function submitAction(url, method) {
+        const token = $('meta[name="csrf-token"]').attr('content');
+        const form = $('<form>', { action: url, method: 'POST' });
+        form.append($('<input>', { type: 'hidden', name: '_token', value: token }));
+        form.append($('<input>', { type: 'hidden', name: '_method', value: method }));
+        form.appendTo('body').trigger('submit');
+    }
+
     // Eliminación suave con SweetAlert2
     $(document).on('click', '.btn-delete', function (e) {
         e.preventDefault();
@@ -186,14 +196,14 @@ $(document).ready(function () {
             cancelButtonText: 'Cancelar',
             reverseButtons: true
         }).then((result) => {
-            if (result.isConfirmed) window.location.href = url;
+            if (result.isConfirmed) submitAction(url, 'DELETE');
         });
     });
 
     // Restaurar desde papelera
     $(document).on('click', '.btn-restore', function (e) {
         e.preventDefault();
-        const url = $(this).attr('href');
+        const url = $(this).data('url');
         const nombre = $(this).data('nombre') || 'este registro';
 
         Swal.fire({
@@ -207,7 +217,7 @@ $(document).ready(function () {
             cancelButtonText: 'Cancelar',
             reverseButtons: true
         }).then((result) => {
-            if (result.isConfirmed) window.location.href = url;
+            if (result.isConfirmed) submitAction(url, 'PUT');
         });
     });
 
@@ -228,7 +238,7 @@ $(document).ready(function () {
             cancelButtonText: 'Cancelar',
             reverseButtons: true
         }).then((result) => {
-            if (result.isConfirmed) window.location.href = url;
+            if (result.isConfirmed) submitAction(url, 'DELETE');
         });
     });
 });

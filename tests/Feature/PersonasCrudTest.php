@@ -87,6 +87,18 @@ class PersonasCrudTest extends TestCase
             ->assertSee('Pérez');
     }
 
+    public function test_edit_retorna_404_si_persona_no_existe(): void
+    {
+        $this->get(route('personas.edit', 9999))
+            ->assertStatus(404);
+    }
+
+    public function test_update_retorna_404_si_persona_no_existe(): void
+    {
+        $this->put(route('personas.update', 9999), $this->datosValidos)
+            ->assertStatus(404);
+    }
+
     // --- Update ---
 
     public function test_update_modifica_persona_y_redirige(): void
@@ -124,7 +136,7 @@ class PersonasCrudTest extends TestCase
     {
         $persona = Personas::create($this->datosValidos);
 
-        $this->get(route('personas.destroy', $persona->id))
+        $this->delete(route('personas.destroy', $persona->id))
             ->assertRedirect(route('personas.index'))
             ->assertSessionHas('success');
 
@@ -160,7 +172,7 @@ class PersonasCrudTest extends TestCase
         $persona = Personas::create($this->datosValidos);
         $persona->delete();
 
-        $this->get(route('personas.restore', $persona->id))
+        $this->put(route('personas.restore', $persona->id))
             ->assertRedirect(route('personas.trash'))
             ->assertSessionHas('success');
 
@@ -174,7 +186,7 @@ class PersonasCrudTest extends TestCase
         $persona = Personas::create($this->datosValidos);
         $persona->delete();
 
-        $this->get(route('personas.forceDelete', $persona->id))
+        $this->delete(route('personas.forceDelete', $persona->id))
             ->assertRedirect(route('personas.trash'))
             ->assertSessionHas('success');
 
@@ -183,7 +195,7 @@ class PersonasCrudTest extends TestCase
 
     public function test_destroy_retorna_404_si_persona_no_existe(): void
     {
-        $this->get(route('personas.destroy', 9999))
+        $this->delete(route('personas.destroy', 9999))
             ->assertStatus(404);
     }
 }
