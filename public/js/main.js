@@ -1,8 +1,4 @@
 $(document).ready(function () {
-    // Actualizar año en el footer
-    const añoActual = new Date().getFullYear();
-    $('#añoActual').text(añoActual);
-
     const dtLanguage = {
         sProcessing: 'Procesando...',
         sLengthMenu: 'Mostrar _MENU_ registros',
@@ -37,9 +33,17 @@ $(document).ready(function () {
         }
     };
 
+    // DataTables genera aria-role (inválido) en la paginación; se limpia en cada sort/paginación.
+    function limpiarAriaPaginacion(api) {
+        $(api.table().container()).find('[aria-role]').removeAttr('aria-role');
+    }
+
     // Tabla principal de personas
-    if ($('#tabla-personas').length) {
-        $('#tabla-personas').DataTable({
+    const tablaPersonas = $('#tabla-personas');
+    if (tablaPersonas.length) {
+        try {
+            tablaPersonas.css('visibility', 'hidden');
+            tablaPersonas.DataTable({
             responsive: true,
             autoWidth: false,
             pageLength: 5,
@@ -148,13 +152,22 @@ $(document).ready(function () {
             ],
             initComplete: function () {
                 $(this.api().table().node()).css('visibility', 'visible');
+            },
+            drawCallback: function () {
+                limpiarAriaPaginacion(this.api());
             }
         }).buttons().container().addClass('mt-2').appendTo('#tabla-personas_wrapper .col-md-6:eq(0)');
+        } catch (err) {
+            tablaPersonas.css('visibility', 'visible');
+        }
     }
 
     // Tabla papelera
-    if ($('#tabla-papelera').length) {
-        $('#tabla-papelera').DataTable({
+    const tablaPapelera = $('#tabla-papelera');
+    if (tablaPapelera.length) {
+        try {
+            tablaPapelera.css('visibility', 'hidden');
+            tablaPapelera.DataTable({
             responsive: true,
             autoWidth: false,
             pageLength: 5,
@@ -165,8 +178,14 @@ $(document).ready(function () {
             language: dtLanguage,
             initComplete: function () {
                 $(this.api().table().node()).css('visibility', 'visible');
+            },
+            drawCallback: function () {
+                limpiarAriaPaginacion(this.api());
             }
         });
+        } catch (err) {
+            tablaPapelera.css('visibility', 'visible');
+        }
     }
 
     // Envía un POST con _token y _method (spoofing de verbo) sin necesitar
