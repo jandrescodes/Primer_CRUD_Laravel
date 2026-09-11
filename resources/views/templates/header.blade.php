@@ -1,36 +1,47 @@
 <!doctype html>
-<html lang="en">
+<html lang="es">
 
 <head>
-    <title>Proyecto</title>
+    <title>Primer CRUD Laravel — @yield('titulo_pagina', 'Inicio')</title>
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <!-- Bootstrap CSS v5.2.1 -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Tema aplicado antes de pintar para evitar parpadeo -->
+    <script>
+        (function() {
+            var tema;
+            try { tema = localStorage.getItem('bs-theme'); } catch (e) { }
+            if (!tema) tema = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' :
+                'light';
+            document.documentElement.setAttribute('data-bs-theme', tema);
+            window.__bsTema = tema;
+        })();
+    </script>
 
-    <!-- DataTables CSS -->
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css">
-    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.4.1/css/responsive.bootstrap5.min.css">
-    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.3.6/css/buttons.bootstrap5.min.css"
-        integrity="sha384-760jVcHKEQ7zpIFhZXFECFibxtsaQSxVvecxbyuYKJI9zvZCZdEVfpjHmL/pNq9K" crossorigin="anonymous">
+    <!-- Bootstrap CSS v5.3.8 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+        integrity="sha384-nRgPTkuX86pH8yjPJUAFuASXQSSl2/bBUiNV47vSYpKFxHJhbcrGnmlYpYJMeD7a" crossorigin="anonymous">
+
+    @yield('styles_extra')
 
     <!-- Icon -->
     <link rel="icon" type="image/x-icon" href="{{ asset('codigo-php.png') }}">
 
     <!-- Custom Styles -->
-    <link rel="stylesheet" href="{{ asset('css/main.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/main.css') }}?v={{ filemtime(public_path('css/main.css')) }}">
 </head>
 
 <body>
+    <a class="skip-link visually-hidden-focusable position-absolute top-0 start-0 p-2 bg-primary text-white text-decoration-none"
+        href="#contenido">Ir al contenido principal</a>
     <header>
         <!-- place navbar here -->
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark" data-bs-theme="dark">
-            <div class="container">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark" data-bs-theme="dark" aria-label="Navegación principal">
+<div class="container">
                 <a class="navbar-brand" href="{{ route('home.index') }}">Laravel</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar"
                     aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -46,7 +57,23 @@
                         </li>
                     </ul>
                 </div>
+                <button id="btn-tema" class="btn btn-sm btn-outline-light ms-3" type="button"
+                    aria-label="Cambiar a tema oscuro">
+                    <i class="fa-solid fa-moon" aria-hidden="true"></i>
+                </button>
+                <script>
+                    // El botón se corrige en el primer paint (antes por parse-time): evita que el
+                    // header muestre la luna cuando el tema persistido ya es oscuro tras un reload.
+                    (function() {
+                        var tema = window.__bsTema || 'light';
+                        var btn = document.getElementById('btn-tema');
+                        if (!btn) return;
+                        var icono = btn.querySelector('i');
+                        if (icono) icono.className = tema === 'dark' ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
+                        btn.setAttribute('aria-label', tema === 'dark' ? 'Cambiar a tema claro' : 'Cambiar a tema oscuro');
+                    })();
+                </script>
             </div>
         </nav>
     </header>
-    <main>
+    <main id="contenido">
