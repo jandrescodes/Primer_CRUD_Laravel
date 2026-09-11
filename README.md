@@ -4,12 +4,12 @@
 
 ![Laravel](https://img.shields.io/badge/Laravel-10-FF2D20?style=for-the-badge&logo=laravel&logoColor=white)
 ![PHP](https://img.shields.io/badge/PHP-8.1+-777BB4?style=for-the-badge&logo=php&logoColor=white)
-![Bootstrap](https://img.shields.io/badge/Bootstrap-5.2-7952B3?style=for-the-badge&logo=bootstrap&logoColor=white)
+![Bootstrap](https://img.shields.io/badge/Bootstrap-5.3-7952B3?style=for-the-badge&logo=bootstrap&logoColor=white)
 ![MySQL](https://img.shields.io/badge/MySQL-MariaDB-4479A1?style=for-the-badge&logo=mysql&logoColor=white)
 ![License](https://img.shields.io/badge/Licencia-MIT-green?style=for-the-badge)
 ![Tests](https://img.shields.io/badge/Tests-21%20passing-brightgreen?style=for-the-badge&logo=phpunit)
 
-Aplicación de práctica desarrollada con **Laravel 10** para gestionar personas mediante operaciones CRUD completas, con papelera de reciclaje, validaciones, exportación de reportes y suite de tests.
+Aplicación de práctica desarrollada con **Laravel 10** para gestionar personas mediante operaciones CRUD completas, con papelera de reciclaje, validaciones, exportación de reportes, tema claro/oscuro y suite de tests.
 
 </div>
 
@@ -59,12 +59,14 @@ Aplicación de práctica desarrollada con **Laravel 10** para gestionar personas
 
 Este repositorio está orientado a aprendizaje y práctica de:
 
-- Arquitectura MVC en Laravel.
+- Archivo MVC en Laravel.
 - Rutas y controladores para flujos CRUD.
 - Form Requests para validación del lado servidor.
 - Soft Deletes y papelera de reciclaje.
 - Vistas Blade reutilizables con layout compartido.
 - Integración de componentes frontend (Bootstrap, DataTables, SweetAlert2).
+- Tema claro/oscuro persistente con `data-bs-theme` (sin librerías extra).
+- Accesibilidad: contraste WCAG AA verificado en ambos temas.
 - Feature Tests con PHPUnit y base de datos en memoria (SQLite).
 
 ## Tecnologías utilizadas
@@ -74,7 +76,8 @@ Este repositorio está orientado a aprendizaje y práctica de:
 | PHP               | ^8.1                                            |
 | Laravel           | ^10.10                                          |
 | Base de datos     | MySQL/MariaDB (vía migraciones de Laravel)      |
-| Frontend          | Blade + Bootstrap 5.2                           |
+| Frontend          | Blade + Bootstrap 5.3 (claro/oscuro, SRI)       |
+| Íconos            | Font Awesome 6.7.2 (CDN + SRI)                  |
 | Tabla interactiva | DataTables 1.13 + Buttons 2.3 (CSV, Excel, PDF) |
 | Alertas           | SweetAlert2                                     |
 | Bundler de assets | Vite                                            |
