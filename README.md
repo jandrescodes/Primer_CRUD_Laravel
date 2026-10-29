@@ -67,7 +67,8 @@ Este repositorio está orientado a aprendizaje y práctica de:
 - Integración de componentes frontend (Bootstrap, DataTables, SweetAlert2).
 - Tema claro/oscuro persistente con `data-bs-theme` (sin librerías extra).
 - Accesibilidad: contraste WCAG AA verificado en ambos temas.
-- Feature Tests con PHPUnit y base de datos en memoria (SQLite).
+- Feature Tests con PHPUnit sobre una base de datos MariaDB de pruebas (`laravel_test`).
+- Exportaciones CSV/copia que neutralizan fórmulas de hoja de cálculo (`= + - @`).
 
 ## Tecnologías utilizadas
 
@@ -81,24 +82,24 @@ Este repositorio está orientado a aprendizaje y práctica de:
 | Tabla interactiva | DataTables 1.13 + Buttons 2.3 (CSV, Excel, PDF) |
 | Alertas           | SweetAlert2                                     |
 | Bundler de assets | Vite                                            |
-| Tests             | PHPUnit + SQLite en memoria                     |
+| Tests             | PHPUnit + MariaDB (`laravel_test`)              |
 
 ## Estructura funcional
 
 - **Home principal:** `/` — estadísticas en tiempo real y acciones rápidas
 - **Módulo People (CRUD):** prefijo `/people`
 
-| Método | Ruta                        | Nombre                 | Descripción                     |
-| ------ | --------------------------- | ---------------------- | ------------------------------- |
-| GET    | `/people`                   | `personas.index`       | Listado de personas activas     |
-| GET    | `/people/create`            | `personas.create`      | Formulario de creación          |
-| POST   | `/people/store`             | `personas.store`       | Guardar nueva persona           |
-| GET    | `/people/edit/{id}`         | `personas.edit`        | Formulario de edición           |
-| PUT    | `/people/update/{id}`       | `personas.update`      | Actualizar persona              |
-| DELETE | `/people/destroy/{id}`      | `personas.destroy`     | Mover a papelera (soft delete)  |
-| GET    | `/people/trash`             | `personas.trash`       | Listado de registros eliminados |
-| PUT    | `/people/restore/{id}`      | `personas.restore`     | Restaurar desde papelera        |
-| DELETE | `/people/force-delete/{id}` | `personas.forceDelete` | Eliminar permanentemente        |
+| Método | Ruta                        | Nombre                 | Descripción                                       |
+| ------ | --------------------------- | ---------------------- | ------------------------------------------------- |
+| GET    | `/people`                   | `personas.index`       | Listado de personas activas                       |
+| GET    | `/people/create`            | `personas.create`      | Formulario de creación                            |
+| POST   | `/people/store`             | `personas.store`       | Guardar nueva persona                             |
+| GET    | `/people/edit/{id}`         | `personas.edit`        | Formulario de edición                             |
+| PUT    | `/people/update/{id}`       | `personas.update`      | Actualizar persona                                |
+| DELETE | `/people/destroy/{id}`      | `personas.destroy`     | Mover a papelera (soft delete)                    |
+| GET    | `/people/trash`             | `personas.trash`       | Listado de registros eliminados                   |
+| PUT    | `/people/restore/{id}`      | `personas.restore`     | Restaurar desde papelera                          |
+| DELETE | `/people/force-delete/{id}` | `personas.forceDelete` | Eliminar permanentemente (solo desde la papelera) |
 
 ## Modelo y datos
 
@@ -118,7 +119,7 @@ Gestionadas con Form Requests (`StorePersonaRequest` / `UpdatePersonaRequest`):
 
 - Todos los campos son requeridos.
 - Campos de texto con máximo 100 caracteres.
-- `fecha_nacimiento` debe ser una fecha válida y anterior a hoy.
+- `fecha_nacimiento` debe tener formato `AAAA-MM-DD` y ser anterior a hoy.
 - Los formularios muestran errores inline con Bootstrap y conservan los valores ingresados.
 
 ## Instalación y ejecución local
@@ -155,23 +156,34 @@ Gestionadas con Form Requests (`StorePersonaRequest` / `UpdatePersonaRequest`):
 
 ## Pruebas
 
-Los tests usan SQLite en memoria y no afectan la base de datos real.
+Los tests usan la base MariaDB `laravel_test` (nunca la de desarrollo). `RefreshDatabase` recrea las tablas en cada test, así que no la uses con datos reales. Crea la base y `.env.testing` como indica `AGENTS.md`.
 
 ```bash
 php artisan test
 ```
 
-Cobertura actual — **21 tests, 54 assertions**:
+Cobertura actual — **36 tests, 86 assertions**:
 
-| Área           | Casos cubiertos                                                  |
-| -------------- | ---------------------------------------------------------------- |
-| Index / Create | Respuesta 200, visualización de datos                            |
-| Store          | Guardado exitoso, campos requeridos, max 100 chars, fecha futura |
-| Edit / Update  | Formulario con datos, actualización, validaciones                |
-| Soft Delete    | Mover a papelera, no aparece en index                            |
-| Trash          | Listado de eliminados                                            |
-| Restore        | Recuperación desde papelera                                      |
-| Force Delete   | Eliminación permanente                                           |
+| Área           | Casos cubiertos                                                                       |
+| -------------- | ------------------------------------------------------------------------------------- |
+| Index / Create | Respuesta 200, visualización de datos                                                 |
+| Store          | Guardado exitoso, campos requeridos, max 100 chars, fecha futura o con formato no ISO |
+| Edit / Update  | Formulario con datos, actualización, validaciones                                     |
+| Soft Delete    | Mover a papelera, no aparece en index                                                 |
+| Trash          | Listado de eliminados                                                                 |
+| Restore        | Recuperación desde papelera                                                           |
+| Force Delete   | Eliminación permanente, rechazo de registros activos                                  |
+
+## Seguridad
+
+Auditoría realizada con el skill `security-audit` (informe fuera del repo, en `~/security-audit-skill/Primer_CRUD_Laravel/run-1/`). Resultado: sin vulnerabilidades confirmadas y dos pistas por validar.
+
+- **Sin autenticación, a propósito.** Es un proyecto de práctica para uso local: cualquiera que alcance la app puede crear, editar, borrar y eliminar permanentemente registros. No lo expongas en una red ni lo despliegues así; para hacerlo agrega el middleware `auth` y una policy en `destroy`, `restore` y `forceDelete`.
+- **Laravel 10 fijado a propósito.** Los avisos que quedan en `laravel/framework` solo se corrigen en 12/13 y ninguno aplica a este código. Actualiza con `composer update --no-security-blocking`.
+- **Scripts de CDN** con versión fija e `integrity` (SRI).
+- **Exportaciones CSV y Copiar** anteponen `'` a las celdas que empiezan con `= + - @`, tab o CR, para que una hoja de cálculo no las evalúe como fórmula.
+- `POST /people/store` limitado a 60 peticiones por minuto; `.env.example` trae `APP_DEBUG=false`.
+- Pendientes de despliegue: activar `TrustHosts`, `SESSION_SECURE_COOKIE=true` con HTTPS y revisar `APP_DEBUG` en el servidor.
 
 ## Solución de problemas
 
