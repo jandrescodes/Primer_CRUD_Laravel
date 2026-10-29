@@ -33,6 +33,16 @@ $(document).ready(function () {
         }
     };
 
+    // Un valor que empieza con = + - @ (o tab/CR) se evalúa como fórmula al abrir el CSV o pegar la copia en una hoja de cálculo.
+    // Corre después del formateo por defecto de Buttons, así que conserva el HTML/entidades ya procesados.
+    function neutralizarFormulas(data) {
+        data.body = data.body.map(function (fila) {
+            return fila.map(function (celda) {
+                return /^[=+\-@\t\r]/.test(celda) ? "'" + celda : celda;
+            });
+        });
+    }
+
     // DataTables genera aria-role (inválido) en la paginación; se limpia en cada sort/paginación.
     function limpiarAriaPaginacion(api) {
         $(api.table().container()).find('[aria-role]').removeAttr('aria-role');
@@ -61,7 +71,7 @@ $(document).ready(function () {
                         {
                             text: '<i class="fa-solid fa-copy me-1"></i> Copiar',
                             extend: 'copy',
-                            exportOptions: { columns: [0, 1, 2, 3, 4] }
+                            exportOptions: { columns: [0, 1, 2, 3, 4], customizeData: neutralizarFormulas }
                         },
                         {
                             extend: 'pdf',
@@ -129,7 +139,7 @@ $(document).ready(function () {
                         {
                             extend: 'csv',
                             text: '<i class="fa-solid fa-file-csv me-1"></i> CSV',
-                            exportOptions: { columns: [0, 1, 2, 3, 4] }
+                            exportOptions: { columns: [0, 1, 2, 3, 4], customizeData: neutralizarFormulas }
                         },
                         {
                             extend: 'print',
