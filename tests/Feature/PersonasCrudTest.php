@@ -234,6 +234,22 @@ class PersonasCrudTest extends TestCase
             ->assertStatus(404);
     }
 
+    public function test_force_delete_no_elimina_persona_activa(): void
+    {
+        $persona = Personas::create($this->datosValidos);
+
+        $this->delete(route('personas.forceDelete', $persona->id))->assertNotFound();
+
+        $this->assertDatabaseHas('personas', ['id' => $persona->id, 'deleted_at' => null]);
+    }
+
+    public function test_store_rechaza_fecha_con_formato_distinto_de_iso(): void
+    {
+        $this->post(route('personas.store'), array_merge($this->datosValidos, [
+            'fecha_nacimiento' => '15/06/1995',
+        ]))->assertSessionHasErrors(['fecha_nacimiento']);
+    }
+
     public function test_force_delete_retorna_404_si_persona_no_existe(): void
     {
         $this->delete(route('personas.forceDelete', 9999))

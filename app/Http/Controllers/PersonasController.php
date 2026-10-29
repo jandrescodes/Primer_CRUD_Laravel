@@ -98,7 +98,7 @@ class PersonasController extends Controller
 
     public function forceDelete(int $id)
     {
-        Personas::withTrashed()->findOrFail($id)->forceDelete();
+        Personas::onlyTrashed()->findOrFail($id)->forceDelete();
         return redirect()->route('personas.trash')->with('success', '¡Registro eliminado permanentemente!');
     }
 }

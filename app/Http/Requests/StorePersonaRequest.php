@@ -17,7 +17,7 @@ class StorePersonaRequest extends FormRequest
             'nombre'           => ['required', 'string', 'max:100'],
             'paterno'          => ['required', 'string', 'max:100'],
             'materno'          => ['required', 'string', 'max:100'],
-            'fecha_nacimiento' => ['required', 'date', 'before:today'],
+            'fecha_nacimiento' => ['required', 'date_format:Y-m-d', 'before:today'],
         ];
     }
 
@@ -31,7 +31,7 @@ class StorePersonaRequest extends FormRequest
             'materno.required'          => 'El apellido materno es obligatorio.',
             'materno.max'               => 'El apellido materno no puede superar 100 caracteres.',
             'fecha_nacimiento.required' => 'La fecha de nacimiento es obligatoria.',
-            'fecha_nacimiento.date'     => 'La fecha de nacimiento debe ser una fecha válida.',
+            'fecha_nacimiento.date_format' => 'La fecha de nacimiento debe ser una fecha válida (AAAA-MM-DD).',
             'fecha_nacimiento.before'   => 'La fecha de nacimiento debe ser anterior a hoy.',
         ];
     }
